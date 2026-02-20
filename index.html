@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DAFRE INNOVATIONS - Sales Terminal</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, #2E75B6 0%, #1a4d7a 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+    .header p {
+      font-size: 14px;
+      opacity: 0.9;
+      font-weight: 300;
+    }
+    .form-container { padding: 40px; }
+    .form-group { margin-bottom: 25px; }
+    label {
+      display: block;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    input, select {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: all 0.3s;
+      background: #fafafa;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #2E75B6;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(46, 117, 182, 0.1);
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .total-section {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      padding: 20px;
+      border-radius: 12px;
+      margin: 30px 0;
+      border-left: 4px solid #28a745;
+    }
+    .total-label {
+      font-size: 13px;
+      color: #666;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .total-amount {
+      font-size: 36px;
+      font-weight: 700;
+      color: #28a745;
+      margin-top: 8px;
+    }
+    .btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(40, 167, 69, 0.6);
+    }
+    .btn:active { transform: translateY(0); }
+    .btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    .feedback {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: 600;
+      display: none;
+    }
+    .feedback.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+      display: block;
+    }
+    .feedback.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+      display: block;
+    }
+    .feedback.warning {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+      display: block;
+    }
+    .footer {
+      padding: 20px;
+      background: #f8f9fa;
+      text-align: center;
+      color: #666;
+      font-size: 12px;
+      border-top: 1px solid #e0e0e0;
+    }
+    @media (max-width: 640px) {
+      .row { grid-template-columns: 1fr; }
+      .form-container { padding: 25px; }
+      .total-amount { font-size: 28px; }
+    }
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #28a745;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .sync-btn {
+      background: #17a2b8;
+      margin-top: 10px;
+      padding: 10px;
+      width: 100%;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .sync-btn:hover {
+      background: #138496;
+    }
+    .pending-badge {
+      background: #ffc107;
+      color: #333;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>DAFRE INNOVATIONS</h1>
+      <p>Oil Sales Management System</p>
+      <div id="pendingIndicator" style="display:none; margin-top:10px;">
+        <span class="pending-badge" id="pendingCount">0 pending</span>
+      </div>
+    </div>
+
+    <div class="form-container">
+      <form id="salesForm">
+        <div class="form-group">
+          <label for="clientName">Client Name *</label>
+          <input type="text" id="clientName" placeholder="Enter customer name" required autocomplete="off">
+        </div>
+
+        <div class="form-group">
+          <label for="productType">Product Type *</label>
+          <select id="productType" required>
+            <option value="">-- Select Product --</option>
+            <option value="Refined Cooking Oil - 5L Bottle">Refined Cooking Oil - 5L Bottle</option>
+            <option value="Refined Cooking Oil - 20L Container">Refined Cooking Oil - 20L Container</option>
+            <option value="Refined Cooking Oil - Bulk (per liter)">Refined Cooking Oil - Bulk (per liter)</option>
+            <option value="Crude Oil - Bulk (per liter)">Crude Oil - Bulk (per liter)</option>
+            <option value="Sunflower Cake - 50kg Bag">Sunflower Cake - 50kg Bag</option>
+            <option value="Custom">Custom Product</option>
+          </select>
+        </div>
+
+        <div id="customProductGroup" class="form-group" style="display: none;">
+          <label for="customProduct">Specify Product</label>
+          <input type="text" id="customProduct" placeholder="Enter custom product" autocomplete="off">
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <label for="quantity">Quantity *</label>
+            <input type="number" id="quantity" min="0.1" step="0.1" placeholder="0" required>
+          </div>
+
+          <div class="form-group">
+            <label for="unitPrice">Unit Price (ZMW) *</label>
+            <input type="number" id="unitPrice" min="0" step="0.01" placeholder="0.00" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="paymentMethod">Payment Method *</label>
+          <select id="paymentMethod" required>
+            <option value="">-- Select Payment Method --</option>
+            <option value="Cash">Cash</option>
+            <option value="Mobile Money">Mobile Money</option>
+            <option value="Bank Transfer">Bank Transfer</option>
+            <option value="Credit (30 days)">Credit (30 days)</option>
+            <option value="Credit (60 days)">Credit (60 days)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="notes">Notes (Optional)</label>
+          <input type="text" id="notes" placeholder="Delivery address, special instructions" autocomplete="off">
+        </div>
+
+        <div class="total-section">
+          <div class="total-label">Total Amount</div>
+          <div class="total-amount">ZMW <span id="totalAmount">0.00</span></div>
+        </div>
+
+        <button type="submit" class="btn" id="submitBtn">Process Sale</button>
+        <button type="button" class="sync-btn" id="syncBtn">🔄 Sync Pending Sales</button>
+        <div id="feedback" class="feedback"></div>
+      </form>
+    </div>
+
+    <div class="footer">
+      <div>DAFRE INNOVATIONS © 2024</div>
+      <div style="margin-top: 5px; font-size: 11px;">Lusaka, Zambia</div>
+    </div>
+  </div>
+
+  <script>
+    // ============================================
+    // YOUR CORRECT APPS SCRIPT URL
+    // ============================================
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby0Vgl4vQ98zpbgnn8Zi0FUsnv-VEWyNgaCx-Q5uHsHQbE_h5L6r0sUingJZmM_flhM/exec';
+    // ============================================
+
+    const form = document.getElementById('salesForm');
+    const clientName = document.getElementById('clientName');
+    const productType = document.getElementById('productType');
+    const customProductGroup = document.getElementById('customProductGroup');
+    const customProduct = document.getElementById('customProduct');
+    const quantity = document.getElementById('quantity');
+    const unitPrice = document.getElementById('unitPrice');
+    const paymentMethod = document.getElementById('paymentMethod');
+    const notes = document.getElementById('notes');
+    const totalAmount = document.getElementById('totalAmount');
+    const feedback = document.getElementById('feedback');
+    const submitBtn = document.getElementById('submitBtn');
+    const syncBtn = document.getElementById('syncBtn');
+    const pendingIndicator = document.getElementById('pendingIndicator');
+    const pendingCount = document.getElementById('pendingCount');
+
+    // Show/hide custom product field
+    productType.addEventListener('change', function() {
+      if (this.value === 'Custom') {
+        customProductGroup.style.display = 'block';
+        customProduct.required = true;
+      } else {
+        customProductGroup.style.display = 'none';
+        customProduct.required = false;
+        customProduct.value = '';
+      }
+    });
+
+    // Calculate total
+    function updateTotal() {
+      const qty = parseFloat(quantity.value) || 0;
+      const price = parseFloat(unitPrice.value) || 0;
+      totalAmount.textContent = (qty * price).toFixed(2);
+    }
+
+    quantity.addEventListener('input', updateTotal);
+    unitPrice.addEventListener('input', updateTotal);
+
+    // Generate receipt number
+    function generateReceiptNumber() {
+      const date = new Date();
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      const t = String(date.getHours()).padStart(2, '0') + String(date.getMinutes()).padStart(2, '0');
+      const r = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+      return `DAFRE-${y}${m}${d}-${t}${r}`;
+    }
+
+    // Update pending indicator
+    function updatePendingIndicator() {
+      const pending = JSON.parse(localStorage.getItem('pendingSales') || '[]');
+      if (pending.length > 0) {
+        pendingIndicator.style.display = 'block';
+        pendingCount.textContent = `${pending.length} pending`;
+      } else {
+        pendingIndicator.style.display = 'none';
+      }
+    }
+
+    // Save to localStorage
+    function saveToLocalStorage(saleData) {
+      const pending = JSON.parse(localStorage.getItem('pendingSales') || '[]');
+      pending.push(saleData);
+      localStorage.setItem('pendingSales', JSON.stringify(pending));
+      updatePendingIndicator();
+    }
+
+    // Remove from localStorage
+    function removeFromLocalStorage(receiptNumber) {
+      const pending = JSON.parse(localStorage.getItem('pendingSales') || '[]');
+      const updated = pending.filter(s => s.Receipt_Number !== receiptNumber);
+      localStorage.setItem('pendingSales', JSON.stringify(updated));
+      updatePendingIndicator();
+    }
+
+    // Sync pending sales
+    async function syncPendingSales() {
+      const pending = JSON.parse(localStorage.getItem('pendingSales') || '[]');
+      if (pending.length === 0) {
+        feedback.className = 'feedback success';
+        feedback.innerHTML = '✓ All sales synced!';
+        setTimeout(() => { feedback.style.display = 'none'; }, 3000);
+        return;
+      }
+
+      syncBtn.disabled = true;
+      syncBtn.innerHTML = '🔄 Syncing...';
+      
+      let synced = 0;
+      let failed = 0;
+
+      for (const sale of pending) {
+        try {
+          const response = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(sale)
+          });
+          
+          // With no-cors, we assume success
+          removeFromLocalStorage(sale.Receipt_Number);
+          synced++;
+          
+        } catch (error) {
+          console.error('Sync failed for:', sale.Receipt_Number, error);
+          failed++;
+        }
+      }
+
+      syncBtn.disabled = false;
+      syncBtn.innerHTML = '🔄 Sync Pending Sales';
+      
+      feedback.className = failed === 0 ? 'feedback success' : 'feedback warning';
+      feedback.innerHTML = `✓ Synced: ${synced} | Failed: ${failed}`;
+      setTimeout(() => { feedback.style.display = 'none'; }, 5000);
+      
+      updatePendingIndicator();
+    }
+
+    // Form submission
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      // Validate form
+      if (!clientName.value || !productType.value || !quantity.value || !unitPrice.value || !paymentMethod.value) {
+        feedback.className = 'feedback error';
+        feedback.innerHTML = '✗ Please fill all required fields';
+        setTimeout(() => { feedback.style.display = 'none'; }, 3000);
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = 'Processing <span class="spinner"></span>';
+
+      const receiptNumber = generateReceiptNumber();
+      const product = productType.value === 'Custom' ? customProduct.value : productType.value;
+      const qty = parseFloat(quantity.value);
+      const price = parseFloat(unitPrice.value);
+      const total = qty * price;
+      const now = new Date();
+
+      const saleData = {
+        Timestamp: now.toISOString(),
+        Date: now.toLocaleDateString('en-GB'),
+        Time: now.toLocaleTimeString('en-GB'),
+        Receipt_Number: receiptNumber,
+        Client_Name: clientName.value.trim(),
+        Product: product,
+        Quantity: qty,
+        Unit_Price: price,
+        Total_Amount: total,
+        Payment_Method: paymentMethod.value,
+        Notes: notes.value.trim() || 'No notes',
+        Operator: 'Terminal User'
+      };
+
+      // Try to send to Google Sheets
+      try {
+        await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(saleData)
+        });
+
+        // With no-cors, we can't read response, so assume success
+        feedback.className = 'feedback success';
+        feedback.innerHTML = `✓ Sale Recorded Successfully!<br>
+          <strong>Receipt: ${receiptNumber}</strong><br>
+          Amount: ZMW ${total.toFixed(2)}`;
+
+        form.reset();
+        updateTotal();
+        customProductGroup.style.display = 'none';
+        customProduct.required = false;
+        
+      } catch (error) {
+        console.error('Error sending to Google Sheets:', error);
+        
+        // Save to localStorage for later sync
+        saveToLocalStorage(saleData);
+        
+        feedback.className = 'feedback warning';
+        feedback.innerHTML = `⚠️ Sale Saved Locally (Offline Mode)<br>
+          <strong>Receipt: ${receiptNumber}</strong><br>
+          Amount: ZMW ${total.toFixed(2)}<br>
+          <small>Will sync automatically when online</small>`;
+      }
+
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = 'Process Sale';
+
+      setTimeout(() => { 
+        feedback.style.display = 'none'; 
+      }, 7000);
+    });
+
+    // Sync button click
+    syncBtn.addEventListener('click', syncPendingSales);
+
+    // Check connection status
+    function checkConnection() {
+      if (!navigator.onLine) {
+        feedback.className = 'feedback warning';
+        feedback.innerHTML = '⚠️ You are offline. Sales will be saved locally.';
+        setTimeout(() => { feedback.style.display = 'none'; }, 5000);
+      }
+    }
+
+    window.addEventListener('online', function() {
+      feedback.className = 'feedback success';
+      feedback.innerHTML = '✓ Connection restored. Syncing pending sales...';
+      syncPendingSales();
+    });
+
+    window.addEventListener('offline', checkConnection);
+
+    // Initial setup
+    updatePendingIndicator();
+    checkConnection();
+
+    // Try to sync every 2 minutes
+    setInterval(() => {
+      if (navigator.onLine) {
+        syncPendingSales();
+      }
+    }, 120000);
+
+    // Validation
+    quantity.addEventListener('blur', function() {
+      if (this.value && parseFloat(this.value) <= 0) {
+        this.value = 0.1;
+        updateTotal();
+      }
+    });
+
+    unitPrice.addEventListener('blur', function() {
+      if (this.value && parseFloat(this.value) < 0) {
+        this.value = 0;
+        updateTotal();
+      }
+    });
+  </script>
+</body>
+</html>
