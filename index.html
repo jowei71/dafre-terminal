@@ -1,527 +1,430 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DAFRE INNOVATIONS - Sales Terminal</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
-      padding: 20px;
-    }
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-      overflow: hidden;
-    }
-    .header {
-      background: linear-gradient(135deg, #2E75B6 0%, #1a4d7a 100%);
-      color: white;
-      padding: 30px;
-      text-align: center;
-    }
-    .header h1 {
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 8px;
-      letter-spacing: 1px;
-    }
-    .header p {
-      font-size: 14px;
-      opacity: 0.9;
-      font-weight: 300;
-    }
-    .form-container { padding: 40px; }
-    .form-group { margin-bottom: 25px; }
-    label {
-      display: block;
-      font-weight: 600;
-      color: #333;
-      margin-bottom: 8px;
-      font-size: 14px;
-    }
-    input, select {
-      width: 100%;
-      padding: 14px 16px;
-      border: 2px solid #e0e0e0;
-      border-radius: 8px;
-      font-size: 15px;
-      transition: all 0.3s;
-      background: #fafafa;
-    }
-    input:focus, select:focus {
-      outline: none;
-      border-color: #2E75B6;
-      background: white;
-      box-shadow: 0 0 0 3px rgba(46, 117, 182, 0.1);
-    }
-    .row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-    .total-section {
-      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-      padding: 20px;
-      border-radius: 12px;
-      margin: 30px 0;
-      border-left: 4px solid #28a745;
-    }
-    .total-label {
-      font-size: 13px;
-      color: #666;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .total-amount {
-      font-size: 36px;
-      font-weight: 700;
-      color: #28a745;
-      margin-top: 8px;
-    }
-    .btn {
-      width: 100%;
-      padding: 16px;
-      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
-    }
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(40, 167, 69, 0.6);
-    }
-    .btn:active { transform: translateY(0); }
-    .btn:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-    .feedback {
-      margin-top: 20px;
-      padding: 15px;
-      border-radius: 8px;
-      text-align: center;
-      font-weight: 600;
-      display: none;
-    }
-    .feedback.success {
-      background: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
-      display: block;
-    }
-    .feedback.error {
-      background: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
-      display: block;
-    }
-    .feedback.warning {
-      background: #fff3cd;
-      color: #856404;
-      border: 1px solid #ffeeba;
-      display: block;
-    }
-    .footer {
-      padding: 20px;
-      background: #f8f9fa;
-      text-align: center;
-      color: #666;
-      font-size: 12px;
-      border-top: 1px solid #e0e0e0;
-    }
-    @media (max-width: 640px) {
-      .row { grid-template-columns: 1fr; }
-      .form-container { padding: 25px; }
-      .total-amount { font-size: 28px; }
-    }
-    .spinner {
-      border: 3px solid #f3f3f3;
-      border-top: 3px solid #28a745;
-      border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      animation: spin 1s linear infinite;
-      display: inline-block;
-      margin-left: 10px;
-      vertical-align: middle;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    .sync-btn {
-      background: #17a2b8;
-      margin-top: 10px;
-      padding: 10px;
-      width: 100%;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    .sync-btn:hover {
-      background: #138496;
-    }
-    .pending-badge {
-      background: #ffc107;
-      color: #333;
-      padding: 5px 10px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-      margin-left: 10px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAFRE INNOVATIONS - Sales Terminal</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1B3A6B; --blue: #2E75B6; --lblue: #D6E4F7;
+    --green: #1B5E20; --lgreen: #E8F5E9;
+    --amber: #E65100; --lamber: #FFF3CD;
+    --red: #B71C1C; --lred: #FFEBEE;
+    --white: #FFFFFF; --off: #F7F9FC;
+    --gray: #6B7A92; --line: #DDE5EF; --text: #1A2636;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Barlow', sans-serif; background: #0F1C2E; color: var(--text); min-height: 100vh; }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background: var(--navy); padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px; border-bottom: 3px solid var(--blue);
+  }
+  .logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 20px; color: white; letter-spacing: 1px; }
+  .logo span { color: #7EC8F4; }
+  .logo small { font-size: 12px; font-weight: 400; color: #AAC8EF; margin-left: 8px; }
+  .topbar-right { display: flex; align-items: center; gap: 10px; }
+  .pending-badge {
+    background: rgba(230,81,0,0.25); color: #FFAB76;
+    border: 1px solid rgba(230,81,0,0.4);
+    font-size: 11px; font-weight: 700; padding: 3px 10px;
+    border-radius: 20px; font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 0.3px;
+  }
+
+  /* ── NAV BAR ── */
+  .navbar {
+    background: #162338; border-bottom: 1px solid #243550;
+    display: flex; align-items: center; padding: 0 24px; gap: 4px;
+  }
+  .nav-link {
+    padding: 12px 20px; color: #7EC8F4; text-decoration: none;
+    font-family: 'Barlow Condensed', sans-serif; font-size: 13px;
+    font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase;
+    border-bottom: 3px solid transparent; transition: all 0.2s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .nav-link:hover { color: white; background: rgba(255,255,255,0.05); }
+  .nav-link.active { color: white; border-bottom-color: #7EC8F4; background: rgba(126,200,244,0.08); }
+  .nav-divider { width: 1px; height: 28px; background: #243550; margin: 0 4px; }
+
+  /* ── MAIN ── */
+  .main { padding: 24px; max-width: 560px; margin: 0 auto; }
+
+  /* ── CARDS ── */
+  .card {
+    background: white; border-radius: 8px;
+    border: 1px solid var(--line); margin-bottom: 16px;
+    overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .card-head {
+    background: var(--navy); color: white; padding: 11px 16px;
+    display: flex; align-items: center; gap: 9px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
+  }
+  .card-head .dot { width: 7px; height: 7px; border-radius: 50%; background: #7EC8F4; flex-shrink: 0; }
+  .card-body { padding: 18px; }
+
+  /* ── FORM ── */
+  .field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 13px; }
+  .field label { font-size: 11px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.5px; }
+  .field label span { color: var(--red); }
+  .field input, .field select, .field textarea {
+    border: 1.5px solid var(--line); border-radius: 5px;
+    padding: 9px 11px; font-family: 'Barlow', sans-serif;
+    font-size: 14px; color: var(--text); background: var(--off);
+    transition: all 0.2s; outline: none; width: 100%;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--blue); background: white;
+    box-shadow: 0 0 0 3px rgba(46,117,182,0.1);
+  }
+  .field textarea { resize: vertical; min-height: 70px; }
+  .field input[readonly] { background: var(--lblue); color: var(--navy); font-weight: 700; border-color: var(--blue); }
+  #custom-product { display: none; }
+
+  /* ── TOTAL BOX ── */
+  .total-box {
+    background: var(--navy); color: white; border-radius: 8px;
+    padding: 16px 20px; text-align: center; margin-bottom: 16px;
+  }
+  .total-box .t-label { font-size: 11px; letter-spacing: 1px; color: #7EC8F4; text-transform: uppercase; margin-bottom: 4px; }
+  .total-box .t-amount { font-family: 'Barlow Condensed', sans-serif; font-size: 36px; font-weight: 800; }
+  .total-box .t-amount span { font-size: 18px; color: #7EC8F4; margin-right: 3px; }
+
+  /* ── BUTTONS ── */
+  .btn {
+    width: 100%; padding: 13px; border: none; border-radius: 6px;
+    cursor: pointer; font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px; font-weight: 700; letter-spacing: 0.8px;
+    text-transform: uppercase; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    margin-bottom: 10px;
+  }
+  .btn-primary { background: var(--navy); color: white; }
+  .btn-primary:hover { background: var(--blue); }
+  .btn-secondary { background: transparent; color: var(--navy); border: 2px solid var(--navy); }
+  .btn-secondary:hover { background: var(--navy); color: white; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* ── QUICK NAV TILES ── */
+  .quick-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .qn-tile {
+    background: white; border-radius: 8px; border: 1px solid var(--line);
+    padding: 16px; text-decoration: none; color: var(--text);
+    transition: all 0.2s; display: flex; flex-direction: column; gap: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+  .qn-tile:hover { border-color: var(--blue); box-shadow: 0 4px 16px rgba(46,117,182,0.15); transform: translateY(-1px); }
+  .qn-tile .qn-icon { font-size: 24px; }
+  .qn-tile .qn-label { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; color: var(--navy); letter-spacing: 0.5px; text-transform: uppercase; }
+  .qn-tile .qn-desc { font-size: 11px; color: var(--gray); }
+  .qn-tile.grn-tile { border-left: 4px solid var(--green); }
+  .qn-tile.grn-tile:hover { border-color: var(--green); background: var(--lgreen); }
+  .qn-tile.sales-tile { border-left: 4px solid var(--blue); background: #EBF5FB; }
+
+  /* ── PENDING LIST ── */
+  .pending-list { max-height: 260px; overflow-y: auto; }
+  .pending-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 12px; border-bottom: 1px solid var(--line);
+    font-size: 13px;
+  }
+  .pending-item:last-child { border-bottom: none; }
+  .pending-item .p-name { font-weight: 600; color: var(--navy); }
+  .pending-item .p-meta { font-size: 11px; color: var(--gray); margin-top: 2px; }
+  .pending-item .p-amount { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 15px; color: var(--green); }
+  .empty-pending { text-align: center; padding: 30px; color: var(--gray); font-size: 13px; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px; padding: 12px 20px;
+    border-radius: 8px; font-weight: 600; font-size: 13px; z-index: 9999;
+    opacity: 0; transform: translateY(16px); transition: all 0.3s;
+    pointer-events: none; font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 0.5px;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+  .toast-ok   { background: #1B5E20; color: white; }
+  .toast-err  { background: #B71C1C; color: white; }
+  .toast-info { background: #1B3A6B; color: white; }
+
+  @media(max-width:480px) {
+    .main { padding: 12px; }
+    .topbar { padding: 0 14px; }
+    .navbar { padding: 0 14px; }
+    .quick-nav { grid-template-columns: 1fr; }
+  }
+</style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1>DAFRE INNOVATIONS</h1>
-      <p>Oil Sales Management System</p>
-      <div id="pendingIndicator" style="display:none; margin-top:10px;">
-        <span class="pending-badge" id="pendingCount">0 pending</span>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="logo">DAFRE <span>INNOVATIONS</span><small>Oil Sales Management</small></div>
+  <div class="topbar-right">
+    <div class="pending-badge" id="pending-count">0 pending</div>
+  </div>
+</div>
+
+<!-- NAV BAR -->
+<div class="navbar">
+  <a class="nav-link active" href="index.html">🛒 Sales Terminal</a>
+  <div class="nav-divider"></div>
+  <a class="nav-link" href="grn.html">📋 GRN & Records</a>
+</div>
+
+<div class="main">
+
+  <!-- QUICK NAV TILES -->
+  <div class="quick-nav">
+    <div class="qn-tile sales-tile">
+      <div class="qn-icon">🛒</div>
+      <div class="qn-label">Sales Terminal</div>
+      <div class="qn-desc">You are here — process oil sales</div>
+    </div>
+    <a class="qn-tile grn-tile" href="grn.html">
+      <div class="qn-icon">📋</div>
+      <div class="qn-label">GRN & Records</div>
+      <div class="qn-desc">Goods received, weight & humidity</div>
+    </a>
+  </div>
+
+  <!-- SALE FORM -->
+  <div class="card">
+    <div class="card-head"><div class="dot"></div>NEW SALE</div>
+    <div class="card-body">
+      <div class="field">
+        <label>Client Name <span>*</span></label>
+        <input type="text" id="client-name" placeholder="Enter client name">
       </div>
-    </div>
-
-    <div class="form-container">
-      <form id="salesForm">
-        <div class="form-group">
-          <label for="clientName">Client Name *</label>
-          <input type="text" id="clientName" placeholder="Enter customer name" required autocomplete="off">
-        </div>
-
-        <div class="form-group">
-          <label for="productType">Product Type *</label>
-          <select id="productType" required>
-            <option value="">-- Select Product --</option>
-            <option value="Refined Cooking Oil - 5L Bottle">Refined Cooking Oil - 5L Bottle</option>
-            <option value="Refined Cooking Oil - 20L Container">Refined Cooking Oil - 20L Container</option>
-            <option value="Refined Cooking Oil - Bulk (per liter)">Refined Cooking Oil - Bulk (per liter)</option>
-            <option value="Crude Oil - Bulk (per liter)">Crude Oil - Bulk (per liter)</option>
-            <option value="Sunflower Cake - 50kg Bag">Sunflower Cake - 50kg Bag</option>
-            <option value="Custom">Custom Product</option>
-          </select>
-        </div>
-
-        <div id="customProductGroup" class="form-group" style="display: none;">
-          <label for="customProduct">Specify Product</label>
-          <input type="text" id="customProduct" placeholder="Enter custom product" autocomplete="off">
-        </div>
-
-        <div class="row">
-          <div class="form-group">
-            <label for="quantity">Quantity *</label>
-            <input type="number" id="quantity" min="0.1" step="0.1" placeholder="0" required>
-          </div>
-
-          <div class="form-group">
-            <label for="unitPrice">Unit Price (ZMW) *</label>
-            <input type="number" id="unitPrice" min="0" step="0.01" placeholder="0.00" required>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="paymentMethod">Payment Method *</label>
-          <select id="paymentMethod" required>
-            <option value="">-- Select Payment Method --</option>
-            <option value="Cash">Cash</option>
-            <option value="Mobile Money">Mobile Money</option>
-            <option value="Bank Transfer">Bank Transfer</option>
-            <option value="Credit (30 days)">Credit (30 days)</option>
-            <option value="Credit (60 days)">Credit (60 days)</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="notes">Notes (Optional)</label>
-          <input type="text" id="notes" placeholder="Delivery address, special instructions" autocomplete="off">
-        </div>
-
-        <div class="total-section">
-          <div class="total-label">Total Amount</div>
-          <div class="total-amount">ZMW <span id="totalAmount">0.00</span></div>
-        </div>
-
-        <button type="submit" class="btn" id="submitBtn">Process Sale</button>
-        <button type="button" class="sync-btn" id="syncBtn">🔄 Sync Pending Sales</button>
-        <div id="feedback" class="feedback"></div>
-      </form>
-    </div>
-
-    <div class="footer">
-      <div>DAFRE INNOVATIONS © 2024</div>
-      <div style="margin-top: 5px; font-size: 11px;">Lusaka, Zambia</div>
+      <div class="field">
+        <label>Product Type <span>*</span></label>
+        <select id="product-type" onchange="handleProductChange()">
+          <option value="">-- Select Product --</option>
+          <option value="Refined Cooking Oil - 5L Bottle">Refined Cooking Oil - 5L Bottle</option>
+          <option value="Refined Cooking Oil - 20L Container">Refined Cooking Oil - 20L Container</option>
+          <option value="Refined Cooking Oil - Bulk (per liter)">Refined Cooking Oil - Bulk (per liter)</option>
+          <option value="Crude Oil - Bulk (per liter)">Crude Oil - Bulk (per liter)</option>
+          <option value="Sunflower Cake - 50kg Bag">Sunflower Cake - 50kg Bag</option>
+          <option value="custom">Custom Product</option>
+        </select>
+      </div>
+      <div class="field" id="custom-product">
+        <label>Specify Product</label>
+        <input type="text" id="custom-product-name" placeholder="Enter product name">
+      </div>
+      <div class="field">
+        <label>Quantity <span>*</span></label>
+        <input type="number" id="quantity" placeholder="Enter quantity" min="1" oninput="calcTotal()">
+      </div>
+      <div class="field">
+        <label>Unit Price (ZMW) <span>*</span></label>
+        <input type="number" id="unit-price" placeholder="Enter price per unit" min="0" step="0.01" oninput="calcTotal()">
+      </div>
+      <div class="field">
+        <label>Payment Method <span>*</span></label>
+        <select id="payment-method">
+          <option value="">-- Select Payment Method --</option>
+          <option value="Cash">Cash</option>
+          <option value="Mobile Money">Mobile Money</option>
+          <option value="Bank Transfer">Bank Transfer</option>
+          <option value="Credit (30 days)">Credit (30 days)</option>
+          <option value="Credit (60 days)">Credit (60 days)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Notes (Optional)</label>
+        <textarea id="notes" placeholder="Any additional notes..."></textarea>
+      </div>
     </div>
   </div>
 
-  <script>
-    // ============================================
-    // YOUR CORRECT APPS SCRIPT URL
-    // ============================================
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby0Vgl4vQ98zpbgnn8Zi0FUsnv-VEWyNgaCx-Q5uHsHQbE_h5L6r0sUingJZmM_flhM/exec';
-    // ============================================
+  <!-- TOTAL -->
+  <div class="total-box">
+    <div class="t-label">Total Amount</div>
+    <div class="t-amount" id="total-display"><span>ZMW</span>0.00</div>
+  </div>
 
-    const form = document.getElementById('salesForm');
-    const clientName = document.getElementById('clientName');
-    const productType = document.getElementById('productType');
-    const customProductGroup = document.getElementById('customProductGroup');
-    const customProduct = document.getElementById('customProduct');
-    const quantity = document.getElementById('quantity');
-    const unitPrice = document.getElementById('unitPrice');
-    const paymentMethod = document.getElementById('paymentMethod');
-    const notes = document.getElementById('notes');
-    const totalAmount = document.getElementById('totalAmount');
-    const feedback = document.getElementById('feedback');
-    const submitBtn = document.getElementById('submitBtn');
-    const syncBtn = document.getElementById('syncBtn');
-    const pendingIndicator = document.getElementById('pendingIndicator');
-    const pendingCount = document.getElementById('pendingCount');
+  <!-- BUTTONS -->
+  <button class="btn btn-primary" id="process-btn" onclick="processSale()">✓ Process Sale</button>
+  <button class="btn btn-secondary" id="sync-btn" onclick="syncPending()">🔄 Sync Pending Sales</button>
 
-    // Show/hide custom product field
-    productType.addEventListener('change', function() {
-      if (this.value === 'Custom') {
-        customProductGroup.style.display = 'block';
-        customProduct.required = true;
-      } else {
-        customProductGroup.style.display = 'none';
-        customProduct.required = false;
-        customProduct.value = '';
-      }
-    });
+  <!-- PENDING -->
+  <div class="card" id="pending-card" style="display:none;">
+    <div class="card-head"><div class="dot"></div>PENDING SALES</div>
+    <div class="card-body" style="padding:0;">
+      <div class="pending-list" id="pending-list"></div>
+    </div>
+  </div>
 
-    // Calculate total
-    function updateTotal() {
-      const qty = parseFloat(quantity.value) || 0;
-      const price = parseFloat(unitPrice.value) || 0;
-      totalAmount.textContent = (qty * price).toFixed(2);
-    }
+</div><!-- /main -->
 
-    quantity.addEventListener('input', updateTotal);
-    unitPrice.addEventListener('input', updateTotal);
+<div class="toast" id="toast"></div>
 
-    // Generate receipt number
-    function generateReceiptNumber() {
-      const date = new Date();
-      const y = date.getFullYear();
-      const m = String(date.getMonth() + 1).padStart(2, '0');
-      const d = String(date.getDate()).padStart(2, '0');
-      const t = String(date.getHours()).padStart(2, '0') + String(date.getMinutes()).padStart(2, '0');
-      const r = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-      return `DAFRE-${y}${m}${d}-${t}${r}`;
-    }
+<script>
+// ── CONFIG — paste your Google Apps Script URL here ──────────────────────
+const SALES_SCRIPT_URL = '';  // Add your sales script URL if you have one
 
-    // Update pending indicator
-    function updatePendingIndicator() {
-      const pending = JSON.parse(localStorage.getItem('pendingSales') || '[]');
-      if (pending.length > 0) {
-        pendingIndicator.style.display = 'block';
-        pendingCount.textContent = `${pending.length} pending`;
-      } else {
-        pendingIndicator.style.display = 'none';
-      }
-    }
+// ── STORAGE ──────────────────────────────────────────────────────────────
+let pendingSales = JSON.parse(localStorage.getItem('dafre_pending_sales') || '[]');
 
-    // Save to localStorage
-    function saveToLocalStorage(saleData) {
-      const pending = JSON.parse(localStorage.getItem('pendingSales') || '[]');
-      pending.push(saleData);
-      localStorage.setItem('pendingSales', JSON.stringify(pending));
-      updatePendingIndicator();
-    }
+function savePending() {
+  localStorage.setItem('dafre_pending_sales', JSON.stringify(pendingSales));
+  updatePendingUI();
+}
 
-    // Remove from localStorage
-    function removeFromLocalStorage(receiptNumber) {
-      const pending = JSON.parse(localStorage.getItem('pendingSales') || '[]');
-      const updated = pending.filter(s => s.Receipt_Number !== receiptNumber);
-      localStorage.setItem('pendingSales', JSON.stringify(updated));
-      updatePendingIndicator();
-    }
+// ── TOAST ────────────────────────────────────────────────────────────────
+function toast(msg, type) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast toast-' + (type || 'ok');
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
 
-    // Sync pending sales
-    async function syncPendingSales() {
-      const pending = JSON.parse(localStorage.getItem('pendingSales') || '[]');
-      if (pending.length === 0) {
-        feedback.className = 'feedback success';
-        feedback.innerHTML = '✓ All sales synced!';
-        setTimeout(() => { feedback.style.display = 'none'; }, 3000);
-        return;
-      }
+// ── FORM LOGIC ───────────────────────────────────────────────────────────
+function handleProductChange() {
+  const val = document.getElementById('product-type').value;
+  document.getElementById('custom-product').style.display = val === 'custom' ? 'flex' : 'none';
+}
 
-      syncBtn.disabled = true;
-      syncBtn.innerHTML = '🔄 Syncing...';
-      
-      let synced = 0;
-      let failed = 0;
+function calcTotal() {
+  const qty   = parseFloat(document.getElementById('quantity').value)   || 0;
+  const price = parseFloat(document.getElementById('unit-price').value) || 0;
+  const total = qty * price;
+  document.getElementById('total-display').innerHTML =
+    '<span>ZMW</span>' + total.toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
 
-      for (const sale of pending) {
-        try {
-          const response = await fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(sale)
-          });
-          
-          // With no-cors, we assume success
-          removeFromLocalStorage(sale.Receipt_Number);
-          synced++;
-          
-        } catch (error) {
-          console.error('Sync failed for:', sale.Receipt_Number, error);
-          failed++;
-        }
-      }
+function getProductName() {
+  const sel = document.getElementById('product-type').value;
+  if (sel === 'custom') return document.getElementById('custom-product-name').value.trim();
+  return sel;
+}
 
-      syncBtn.disabled = false;
-      syncBtn.innerHTML = '🔄 Sync Pending Sales';
-      
-      feedback.className = failed === 0 ? 'feedback success' : 'feedback warning';
-      feedback.innerHTML = `✓ Synced: ${synced} | Failed: ${failed}`;
-      setTimeout(() => { feedback.style.display = 'none'; }, 5000);
-      
-      updatePendingIndicator();
-    }
+// ── PROCESS SALE ─────────────────────────────────────────────────────────
+async function processSale() {
+  const client  = document.getElementById('client-name').value.trim();
+  const product = getProductName();
+  const qty     = parseFloat(document.getElementById('quantity').value)   || 0;
+  const price   = parseFloat(document.getElementById('unit-price').value) || 0;
+  const method  = document.getElementById('payment-method').value;
 
-    // Form submission
-    form.addEventListener('submit', async function(e) {
-      e.preventDefault();
-      
-      // Validate form
-      if (!clientName.value || !productType.value || !quantity.value || !unitPrice.value || !paymentMethod.value) {
-        feedback.className = 'feedback error';
-        feedback.innerHTML = '✗ Please fill all required fields';
-        setTimeout(() => { feedback.style.display = 'none'; }, 3000);
-        return;
-      }
+  if (!client)  { toast('Please enter client name', 'err');    return; }
+  if (!product) { toast('Please select a product', 'err');     return; }
+  if (!qty)     { toast('Please enter a quantity', 'err');     return; }
+  if (!price)   { toast('Please enter a unit price', 'err');   return; }
+  if (!method)  { toast('Please select payment method', 'err'); return; }
 
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = 'Processing <span class="spinner"></span>';
+  const sale = {
+    id:        Date.now(),
+    timestamp: new Date().toISOString(),
+    date:      new Date().toLocaleDateString(),
+    time:      new Date().toLocaleTimeString(),
+    client, product, qty, price,
+    total:     qty * price,
+    method,
+    notes:     document.getElementById('notes').value,
+    synced:    false,
+  };
 
-      const receiptNumber = generateReceiptNumber();
-      const product = productType.value === 'Custom' ? customProduct.value : productType.value;
-      const qty = parseFloat(quantity.value);
-      const price = parseFloat(unitPrice.value);
-      const total = qty * price;
-      const now = new Date();
+  const btn = document.getElementById('process-btn');
+  btn.disabled = true; btn.textContent = '⏳ Processing...';
 
-      const saleData = {
-        Timestamp: now.toISOString(),
-        Date: now.toLocaleDateString('en-GB'),
-        Time: now.toLocaleTimeString('en-GB'),
-        Receipt_Number: receiptNumber,
-        Client_Name: clientName.value.trim(),
-        Product: product,
-        Quantity: qty,
-        Unit_Price: price,
-        Total_Amount: total,
-        Payment_Method: paymentMethod.value,
-        Notes: notes.value.trim() || 'No notes',
-        Operator: 'Terminal User'
-      };
+  // Try to sync immediately if URL configured
+  if (SALES_SCRIPT_URL) {
+    try {
+      await fetch(SALES_SCRIPT_URL, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'SALE', ...sale })
+      });
+      sale.synced = true;
+    } catch(e) {}
+  }
 
-      // Try to send to Google Sheets
-      try {
-        await fetch(APPS_SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(saleData)
-        });
+  pendingSales.push(sale);
+  savePending();
+  clearForm();
 
-        // With no-cors, we can't read response, so assume success
-        feedback.className = 'feedback success';
-        feedback.innerHTML = `✓ Sale Recorded Successfully!<br>
-          <strong>Receipt: ${receiptNumber}</strong><br>
-          Amount: ZMW ${total.toFixed(2)}`;
+  btn.disabled = false; btn.textContent = '✓ Process Sale';
 
-        form.reset();
-        updateTotal();
-        customProductGroup.style.display = 'none';
-        customProduct.required = false;
-        
-      } catch (error) {
-        console.error('Error sending to Google Sheets:', error);
-        
-        // Save to localStorage for later sync
-        saveToLocalStorage(saleData);
-        
-        feedback.className = 'feedback warning';
-        feedback.innerHTML = `⚠️ Sale Saved Locally (Offline Mode)<br>
-          <strong>Receipt: ${receiptNumber}</strong><br>
-          Amount: ZMW ${total.toFixed(2)}<br>
-          <small>Will sync automatically when online</small>`;
-      }
+  if (sale.synced) toast('✅ Sale processed & synced!', 'ok');
+  else toast('💾 Sale saved — will sync when connected', 'info');
+}
 
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = 'Process Sale';
+// ── SYNC ─────────────────────────────────────────────────────────────────
+async function syncPending() {
+  const unsynced = pendingSales.filter(s => !s.synced);
+  if (!unsynced.length) { toast('All sales are already synced!', 'info'); return; }
+  if (!SALES_SCRIPT_URL) { toast('No sync URL configured', 'err'); return; }
 
-      setTimeout(() => { 
-        feedback.style.display = 'none'; 
-      }, 7000);
-    });
+  const btn = document.getElementById('sync-btn');
+  btn.disabled = true; btn.textContent = '⏳ Syncing...';
+  let count = 0;
 
-    // Sync button click
-    syncBtn.addEventListener('click', syncPendingSales);
+  for (const sale of unsynced) {
+    try {
+      await fetch(SALES_SCRIPT_URL, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'SALE', ...sale })
+      });
+      sale.synced = true; count++;
+    } catch(e) {}
+  }
 
-    // Check connection status
-    function checkConnection() {
-      if (!navigator.onLine) {
-        feedback.className = 'feedback warning';
-        feedback.innerHTML = '⚠️ You are offline. Sales will be saved locally.';
-        setTimeout(() => { feedback.style.display = 'none'; }, 5000);
-      }
-    }
+  savePending();
+  btn.disabled = false; btn.textContent = '🔄 Sync Pending Sales';
+  toast(`✅ Synced ${count} of ${unsynced.length} sales`, 'ok');
+}
 
-    window.addEventListener('online', function() {
-      feedback.className = 'feedback success';
-      feedback.innerHTML = '✓ Connection restored. Syncing pending sales...';
-      syncPendingSales();
-    });
+// ── CLEAR FORM ───────────────────────────────────────────────────────────
+function clearForm() {
+  ['client-name','quantity','unit-price','notes','custom-product-name'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  document.getElementById('product-type').value = '';
+  document.getElementById('payment-method').value = '';
+  document.getElementById('custom-product').style.display = 'none';
+  document.getElementById('total-display').innerHTML = '<span>ZMW</span>0.00';
+}
 
-    window.addEventListener('offline', checkConnection);
+// ── PENDING UI ────────────────────────────────────────────────────────────
+function updatePendingUI() {
+  const count = pendingSales.filter(s => !s.synced).length;
+  document.getElementById('pending-count').textContent = count + ' pending';
 
-    // Initial setup
-    updatePendingIndicator();
-    checkConnection();
+  const card = document.getElementById('pending-card');
+  const list = document.getElementById('pending-list');
 
-    // Try to sync every 2 minutes
-    setInterval(() => {
-      if (navigator.onLine) {
-        syncPendingSales();
-      }
-    }, 120000);
+  if (!pendingSales.length) {
+    card.style.display = 'none'; return;
+  }
+  card.style.display = 'block';
 
-    // Validation
-    quantity.addEventListener('blur', function() {
-      if (this.value && parseFloat(this.value) <= 0) {
-        this.value = 0.1;
-        updateTotal();
-      }
-    });
+  if (!pendingSales.length) {
+    list.innerHTML = '<div class="empty-pending">No pending sales</div>'; return;
+  }
 
-    unitPrice.addEventListener('blur', function() {
-      if (this.value && parseFloat(this.value) < 0) {
-        this.value = 0;
-        updateTotal();
-      }
-    });
-  </script>
+  list.innerHTML = [...pendingSales].reverse().slice(0, 10).map(s => `
+    <div class="pending-item">
+      <div>
+        <div class="p-name">${s.client}</div>
+        <div class="p-meta">${s.product} &nbsp;·&nbsp; ${s.qty} units &nbsp;·&nbsp; ${s.date} &nbsp;·&nbsp; ${s.synced ? '✅ Synced' : '⏳ Pending'}</div>
+      </div>
+      <div class="p-amount">ZMW ${(s.total||0).toLocaleString('en',{minimumFractionDigits:2})}</div>
+    </div>
+  `).join('');
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────
+window.onload = () => updatePendingUI();
+</script>
 </body>
 </html>
