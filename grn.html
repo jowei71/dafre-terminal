@@ -446,7 +446,7 @@
 // ─── STORAGE ────────────────────────────────────────────────────────────────
 let GRNs = JSON.parse(localStorage.getItem('dafre_grns2') || '[]');
 let PAYs = JSON.parse(localStorage.getItem('dafre_pays2') || '[]');
-let SCRIPT_URL = localStorage.getItem('dafre_script_url') || 'https://script.google.com/macros/s/AKfycbzqpGvScVO5RWrcAW-J8BwoJYueYTA2k2FGbaMqlc1xpfYRkqn_1DPWuLfB-kBD0dUUsQ/exec';
+let SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxSfrTygY9lzp7ePCU0ashov52pZgG3PJOyF-oFHbQ_JOcG34IJELaw6WUspKoF2m2e1Q/exec';
 
 function persist() {
   localStorage.setItem('dafre_grns2', JSON.stringify(GRNs));
@@ -514,12 +514,13 @@ async function testAndSaveURL() {
 async function syncToSheets(data) {
   if (!SCRIPT_URL) return false;
   try {
-    await fetch(SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+    const params = new URLSearchParams();
+    Object.keys(data).forEach(key => {
+      const val = data[key];
+      if (typeof val !== 'object') params.append(key, val ?? '');
     });
+    const url = SCRIPT_URL + '?' + params.toString();
+    await fetch(url, { method: 'GET', mode: 'no-cors' });
     return true;
   } catch(e) { return false; }
 }
